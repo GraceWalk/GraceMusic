@@ -6,13 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>GraceMusic - 后台管理</title>
+    <link rel="stylesheet" href="./css/admin.css">
 </head>
 
 <body>
-    <div id="container">
-        <div id="pickfiles">
-            上传
+
+    <div class="container" id="container">
+        <div class="pickfiles" id="pickfiles">
+            <div class="title">GraceMusic</div>
+            <div class="uploadText">点击此处或拖拽以上传文件</div>
         </div>
+        <div class="song-list"></div>
     </div>
 
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
