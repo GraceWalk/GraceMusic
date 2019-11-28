@@ -85,8 +85,10 @@
             this.view = view;
             this.view.init();
             this.view.hide();
-            this.model = model;
             this.view.render();
+
+            this.model = model;
+
             this.bindEventHubs();
             this.bindEvents();
         },
@@ -96,20 +98,20 @@
                 this.model.saveData();
                 this.view.render();
                 if (this.model.data.id === '') {
-                    console.log('创建歌曲')
                     this.model.createSong().then(() => {
                         window.eventHub.emit('switchPage');
                     });
                 } else {
-                    console.log('更新歌曲')
                     this.model.updateSong().then(() => {
                         window.eventHub.emit('switchPage');
                     });
                 }
             });
+
             this.view.$el.on('click', '#back', () => {
                 window.eventHub.emit('switchPage');
             });
+
             this.view.$el.on('click', '#cancel', () => {
                 window.eventHub.emit('switchPage');
                 this.view.render();
@@ -117,24 +119,35 @@
         },
         bindEventHubs() { //绑定订阅事件
             window.eventHub.on('uploaded', (data) => { //上传歌曲完成
-                let songName = data.substr(0, data.length - 4);
-                let url = `http://q1lwd4mpb.bkt.clouddn.com/${encodeURIComponent(songName)}.mp3`;
+                this.model.saveData();
+
+                let songString = data.substr(0, data.length - 4);
+                let namePart = songString.split('-').filter(d => d);
+                let songName = '';
+                for (let i = 0; i < namePart.length; i++) {
+                    if (i >= 1) {
+                        songName += namePart[i] + ' ';
+                    }
+                }
+                let url = `http://q1lwd4mpb.bkt.clouddn.com/${encodeURIComponent(songString)}.mp3`;
+
                 this.model.data.name = songName;
+                this.model.data.singer = namePart[0];
                 this.model.data.url = url;
                 this.view.show();
                 this.view.render(this.model.data);
             });
+
             window.eventHub.on('editSong', (data) => { //编辑歌曲
                 this.view.show();
                 this.model.data = data;
                 this.view.render(this.model.data);
             });
+
             window.eventHub.on('switchPage', () => { //切换页面
                 if (this.view.$el.is(':hidden')) {
-                    console.log('展示新建歌曲页面')
                     this.view.show();
                 } else {
-                    console.log('隐藏新建歌曲页面')
                     this.view.hide();
                 }
             })

@@ -7,7 +7,9 @@
         </div>
         <div class="song-list">
             <div class="title">歌曲目录</div>
-            <ul></ul>
+            <ul>
+            <li><div class="number">序号</div><div class="name">歌曲</div><div class="singer">歌手</div><div class="edit">编辑</div><div class="destroy">删除</div></li>
+            </ul>
             <div class="turing-page">
                 <div class="prev">上一页</div>
                 <div class="next">下一页</div>
@@ -92,14 +94,12 @@
         },
         bindEventHubs() {
             window.eventHub.on('switchPage', () => { //切换页面
-                this.model.getSongs().then(() => {
-                    this.view.render(this.model.data);
-                });
                 if (this.view.$el.is(':hidden')) {
-                    console.log('展示歌曲列表页面')
+                    this.model.getSongs().then(() => {
+                        this.view.render(this.model.data);
+                    });
                     this.view.show();
                 } else {
-                    console.log('隐藏歌曲列表页面')
                     this.view.hide();
                 }
             })
