@@ -34,7 +34,7 @@
                 html = html.replace(`__${string}__`, data[string] || '');
             });
             $(this.el).html(html);
-            // $(this.el).hide();
+            $(this.el).hide();
         }
     }
 

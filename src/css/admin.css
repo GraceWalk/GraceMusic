@@ -9,6 +9,13 @@ input {
     outline: none;
 }
 
+ul,
+li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
 
 /* 主体部分样式 */
 
@@ -68,6 +75,7 @@ input {
     z-index: 2;
 }
 
+.container .song-list-box .new,
 .container .new-song-box .back {
     box-sizing: border-box;
     width: 30px;
@@ -119,7 +127,8 @@ input {
     margin: 15px 10px;
 }
 
-.container .new-song .change {
+.container .song-list-box .turing-page,
+.container .new-song-box .change {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -129,8 +138,10 @@ input {
     background-color: #fcf9f9;
 }
 
-.container .new-song .cancel,
-.container .new-song .save {
+.container .song-list-box .prev,
+.container .song-list-box .next,
+.container .new-song-box .cancel,
+.container .new-song-box .save {
     width: 100px;
     height: 36px;
     border: 1px solid #555870;
@@ -141,11 +152,80 @@ input {
     cursor: pointer;
 }
 
-.container .new-song .cancel {
+.container .song-list-box .prev,
+.container .new-song-box .cancel {
     color: #555870;
 }
 
-.container .new-song .save {
+.container .song-list-box .next,
+.container .new-song-box .save {
     background-color: #555870;
     color: #fcf9f9;
+}
+
+
+/* 歌曲列表样式 */
+
+.container .song-list {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container .song-list .title {
+    margin: 30px 0 60px 0;
+    font-size: 32px;
+    text-align: center;
+    font-weight: 500;
+    color: #555870;
+    letter-spacing: 3px;
+}
+
+.container .song-list ul {
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+}
+
+.container .song-list ul li {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 46px;
+    font-size: 18px;
+}
+
+.container .song-list ul li:hover {
+    background-color: #f7d8d5;
+}
+
+.container .song-list ul li .number {
+    margin: 0 10px 0 30px;
+    width: 30px;
+}
+
+.container .song-list ul li .name,
+.container .song-list ul li .singer {
+    width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.container .song-list ul li .name {
+    width: 220px;
+}
+
+.container .song-list ul li .edit,
+.container .song-list ul li .delete {
+    width: 30px;
+    cursor: pointer;
+}
+
+.container .song-list ul li .delete {
+    margin-right: 20px;
 }
