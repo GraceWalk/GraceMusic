@@ -5,10 +5,15 @@ body {
     font-family: 'Microsoft YaHei'
 }
 
+input {
+    outline: none;
+}
+
 
 /* 主体部分样式 */
 
 .container {
+    position: relative;
     display: flex;
     justify-content: flex-start;
     width: 950px;
@@ -19,6 +24,9 @@ body {
     overflow: hidden;
     box-shadow: 0 0 10px 4px rgba(98, 100, 117, 0.548);
 }
+
+
+/* 上传区域样式 */
 
 .container .pickfiles {
     display: flex;
@@ -42,10 +50,96 @@ body {
     font-size: 16px;
 }
 
-.container .song-list {
+
+/* 歌曲列表盒子 / 新建歌曲盒子 */
+
+.container .song-list-box,
+.container .new-song-box {
+    position: absolute;
+    top: 0;
+    right: 0;
     box-sizing: border-box;
     width: 60%;
     height: 100%;
-    padding: 30px 30px;
     background-color: #f8edec;
+}
+
+.container .new-song-box {
+    z-index: 2;
+}
+
+.container .new-song-box .back {
+    position: absolute;
+    top: 5%;
+    left: 4%;
+    z-index: 3;
+}
+
+
+/* 新建歌曲内样式 */
+
+.container .new-song {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.container .new-song .title {
+    margin: 65px 0 0 0;
+    font-size: 32px;
+    text-align: center;
+    font-weight: 500;
+    color: #555870;
+    letter-spacing: 3px;
+}
+
+.container .new-song .input-box label {
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: #8183a0;
+}
+
+.container .new-song .input-box input {
+    height: 32px;
+    width: 250px;
+    padding-left: 7px;
+    font-size: 16px;
+    border: 1px solid #bebfc9;
+    border-radius: 7px;
+    background-color: #fcf9f9;
+    margin: 15px 10px;
+}
+
+.container .new-song .change {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 90px;
+    border-top-right-radius: 15px;
+    background-color: #fcf9f9;
+}
+
+.container .new-song .cancel,
+.container .new-song .save {
+    width: 100px;
+    height: 36px;
+    border: 1px solid #555870;
+    border-radius: 20px;
+    font-size: 18px;
+    text-align: center;
+    line-height: 36px;
+}
+
+.container .new-song .cancel {
+    color: #555870;
+}
+
+.container .new-song .save {
+    background-color: #555870;
+    color: #fcf9f9;
 }
