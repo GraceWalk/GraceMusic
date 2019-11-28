@@ -69,10 +69,15 @@ input {
 }
 
 .container .new-song-box .back {
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
     position: absolute;
     top: 5%;
     left: 4%;
     z-index: 3;
+    text-align: center;
+    cursor: pointer;
 }
 
 
@@ -133,6 +138,7 @@ input {
     font-size: 18px;
     text-align: center;
     line-height: 36px;
+    cursor: pointer;
 }
 
 .container .new-song .cancel {
