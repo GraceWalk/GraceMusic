@@ -226,11 +226,11 @@ li {
 }
 
 .container .song-list ul li .edit,
-.container .song-list ul li .delete {
+.container .song-list ul li .destroy {
     width: 30px;
     cursor: pointer;
 }
 
-.container .song-list ul li .delete {
+.container .song-list ul li .destroy {
     margin-right: 20px;
 }
