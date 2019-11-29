@@ -35,6 +35,7 @@ li {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 0 10px 4px rgba(98, 100, 117, 0.548);
+    background-color: #f8edec;
 }
 
 
@@ -83,8 +84,12 @@ li {
     background-color: #f8edec;
 }
 
-.container .new-song-box {
+.container .song-list-box {
     z-index: 2;
+}
+
+.container .new-song-box {
+    z-index: 1;
 }
 
 .container .song-list-box .new,
@@ -152,8 +157,8 @@ li {
     height: 90px;
     background-color: #f8edec;
     /* background: url('../img/catt.png') no-repeat; */
-    background-size: 100%;
-    background-position: right 40%;
+    /* background-size: 100%;
+    background-position: right 40%; */
 }
 
 .container .song-list-box .prev,

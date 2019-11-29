@@ -39,10 +39,10 @@
             this.$el.html(html);
         },
         show() { //展示页面
-            this.$el.show()
+            this.$el.fadeIn('500');
         },
         hide() { //隐藏页面
-            this.$el.hide()
+            this.$el.fadeOut('fast');
         }
     }
 
