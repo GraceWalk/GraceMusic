@@ -12,6 +12,7 @@
             </ul>
             <div class="turing-page">
                 <div class="prev" id="prev">上一页</div>
+                <div class="pages" id="pages">__nowPage__ / __allPage__</div>
                 <div class="next" id="next">下一页</div>
             </div>
         </div>
@@ -19,42 +20,64 @@
         init() {
             this.$el = $(this.el);
         },
-        render({ songs = [] }) {
-            this.$el.html(this.template);
+        render({ songs = [], nowPage, allPage }) {
+            let html = this.template;
+            html = html.replace('__nowPage__', nowPage).replace('__allPage__', allPage);
+            this.$el.html(html);
             let number = 1;
             let liList = songs.map((song) => {
                 let $li = $('<li></li>').html(`<div class="number">${number++}</div><div class="name">${song.name}</div><div class="singer">${song.singer}</div><svg t="1574916533954" class="edit" id="edit" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1962" width="24" height="24"><path d="M978.1248 45.8752c-28.7744-28.7744-67.0208-44.5952-107.7248-44.5952s-78.9504 15.8208-107.7248 44.5952l-652.8 652.8c-2.6624 2.6624-4.6592 5.8368-5.9392 9.3696l-102.4 281.6c-3.3792 9.3696-1.0752 19.8144 5.9392 26.8288 4.864 4.864 11.4176 7.4752 18.1248 7.4752 2.9184 0 5.888-0.512 8.7552-1.536l281.6-102.4c3.5328-1.28 6.7072-3.328 9.3696-5.9392l652.8-652.8c28.7744-28.7744 44.5952-67.0208 44.5952-107.7248s-15.8208-78.9504-44.5952-107.7248zM293.12 873.8816l-224.7168 81.7152 81.7152-224.7168 566.6816-566.6816 143.0016 143.0016-566.6816 566.6816zM941.8752 225.0752l-45.8752 45.8752-143.0016-143.0016 45.8752-45.8752c19.0976-19.0976 44.4928-29.5936 71.4752-29.5936s52.3776 10.496 71.4752 29.5936c19.0976 19.0976 29.5936 44.4928 29.5936 71.4752s-10.496 52.3776-29.5936 71.4752z" p-id="1963" fill="#535970"></path></svg><svg t="1574916683319" class="destroy" id="destroy" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3335" width="24" height="24"><path d="M608 768c-17.696 0-32-14.304-32-32L576 384c0-17.696 14.304-32 32-32s32 14.304 32 32l0 352C640 753.696 625.696 768 608 768zM416 768c-17.696 0-32-14.304-32-32L384 384c0-17.696 14.304-32 32-32s32 14.304 32 32l0 352C448 753.696 433.696 768 416 768zM928 224l-160 0L768 160c0-52.928-42.72-96-95.264-96L352 64C299.072 64 256 107.072 256 160l0 64L96 224C78.304 224 64 238.304 64 256s14.304 32 32 32l832 0c17.696 0 32-14.304 32-32S945.696 224 928 224zM320 160c0-17.632 14.368-32 32-32l320.736 0C690.272 128 704 142.048 704 160l0 64L320 224 320 160zM736.128 960 288.064 960c-52.928 0-96-43.072-96-96L192.064 383.52c0-17.664 14.336-32 32-32s32 14.336 32 32L256.064 864c0 17.664 14.368 32 32 32l448.064 0c17.664 0 32-14.336 32-32L768.128 384.832c0-17.664 14.304-32 32-32s32 14.336 32 32L832.128 864C832.128 916.928 789.056 960 736.128 960z" p-id="3336" fill="#535970"></path></svg>`).attr('song-id', song.id);
                 return $li;
-            });
+            })
             liList.map((li, i) => {
                 this.$el.find('ul').append(li);
             })
         },
         show() {
-            this.$el.fadeIn('500');
+            this.$el.css("z-index", '2');
+            this.$el.fadeIn('fast');
         },
         hide() {
+            this.$el.css("z-index", '-1');
             this.$el.fadeOut('fast');
+        },
+        toPage(nowPage, allPage) {
+            this.$el.find('#pages').html(`${nowPage} / ${allPage}`);
         }
     }
 
     let model = {
         data: {
             songs: [],
-            page: 1
+            nowPage: 1,
+            allPage: 1
         },
         getSongs() {
             let songs = new AV.Query('Songs');
             return songs.find().then((songs) => {
+                this.data.allPage = parseInt((songs.length - 1) / 8) + 1;
                 this.data.songs = songs.map((song) => {
                     return { id: song.id, ...song.attributes }
                 })
                 return songs;
-            });
+            })
         },
         destroySong(destroySongId) {
             let song = AV.Object.createWithoutData('Songs', destroySongId);
             return song.destroy();
+        },
+        toPage(allLi, pagedNum) {
+            let allPageNum = this.data.allPage;
+            if (1 <= pagedNum && pagedNum <= allPageNum) {
+                for (let i = 1; i <= allLi.length - 1; i++) {
+                    if (i <= (pagedNum - 1) * 8) {
+                        $(allLi[i]).hide();
+                    } else {
+                        $(allLi[i]).show();
+                    }
+                }
+                this.data.nowPage = pagedNum;
+            }
         }
     }
 
@@ -67,7 +90,29 @@
             this.model.getSongs().then(() => {
                 this.view.render(this.model.data);
                 this.bindEvents();
-            });
+            })
+        },
+        toPage(status) {
+            let nowPage = this.model.data.nowPage;
+            let allPage = this.model.data.allPage;
+            let allLi = this.view.$el.find('li');
+            let addPageNum = 0;
+            switch (status) {
+                case 'prev':
+                    addPageNum = -1;
+                    break;
+                case 'now':
+                    addPageNum = 0;
+                    break;
+                case 'next':
+                    addPageNum = 1;
+                    break;
+                case 'last':
+                    addPageNum = allPage - nowPage;
+                    break;
+            }
+            this.model.toPage(allLi, nowPage + addPageNum);
+            this.view.toPage(this.model.data.nowPage, allPage);
         },
         bindEvents() {
             this.view.$el.on('click', '#edit', (e) => { //绑定编辑按键
@@ -79,10 +124,12 @@
                         this.view.hide();
                     }
                 })
-            });
+            })
+
             this.view.$el.on('click', '#new', () => { //绑定新建歌曲按键
                 window.eventHub.emit('switchPage');
-            });
+            })
+
             this.view.$el.on('click', '#destroy', (e) => { //删除歌曲事件
                 let destroySongId = $(e.currentTarget).parent().attr('song-id');
                 this.model.destroySong(destroySongId).then(() => {
@@ -90,29 +137,37 @@
                         this.view.render(this.model.data);
                         this.bindEvents();
                     })
-                });
-            });
-            this.view.$el.on('click', '#next', () => {
-                let allLi = this.view.$el.find('li');
-                let allPage = this.view.$el.find('li');
-            });
-            this.view.$el.on('click', '#prev', () => {
+                })
+            })
 
-            });
+            this.view.$el.on('click', '#next', () => {
+                this.toPage('next');
+            })
+
+            this.view.$el.on('click', '#prev', () => {
+                this.toPage('prev');
+            })
         },
         bindEventHubs() {
             window.eventHub.on('switchPage', () => { //切换页面
                 if (this.view.$el.is(':hidden')) {
                     this.model.getSongs().then(() => {
                         this.view.render(this.model.data);
+                        this.toPage('now');
+
                     });
                     this.view.show();
                 } else {
                     this.view.hide();
                 }
             })
+
             window.eventHub.on('uploaded', () => {
                 this.view.hide();
+            })
+
+            window.eventHub.on('toLastPage', () => {
+                this.toPage('last');
             })
         }
     }

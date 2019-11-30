@@ -35,13 +35,15 @@
             let html = this.template;
             placeholders.map((string) => {
                 html = html.replace(`__${string}__`, data[string] || '');
-            });
+            })
             this.$el.html(html);
         },
-        show() { //展示页面
-            this.$el.fadeIn('500');
+        show() {
+            this.$el.css("z-index", '2');
+            this.$el.fadeIn('fast');
         },
-        hide() { //隐藏页面
+        hide() {
+            this.$el.css("z-index", '-1');
             this.$el.fadeOut('fast');
         }
     }
@@ -57,7 +59,7 @@
             let str = ['name', 'singer', 'url'];
             str.map((string) => {
                 this.data[string] = $(`input[name=${string}]`).val();
-            });
+            })
         },
         createSong() { //新建歌曲上传到LeanCloud
             let Songs = AV.Object.extend('Songs');
@@ -100,11 +102,12 @@
                 if (this.model.data.id === '') {
                     this.model.createSong().then(() => {
                         window.eventHub.emit('switchPage');
-                    });
+                        window.eventHub.emit('toLastPage');
+                    })
                 } else {
                     this.model.updateSong().then(() => {
                         window.eventHub.emit('switchPage');
-                    });
+                    })
                 }
             });
 
@@ -136,13 +139,13 @@
                 this.model.data.url = url;
                 this.view.show();
                 this.view.render(this.model.data);
-            });
+            })
 
             window.eventHub.on('editSong', (data) => { //编辑歌曲
                 this.view.show();
                 this.model.data = data;
                 this.view.render(this.model.data);
-            });
+            })
 
             window.eventHub.on('switchPage', () => { //切换页面
                 if (this.view.$el.is(':hidden')) {
