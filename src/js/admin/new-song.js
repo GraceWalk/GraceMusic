@@ -95,14 +95,13 @@
             this.bindEvents();
         },
         bindEvents() { //绑定事件
-            this.view.$el.on('submit', 'form', (e) => {
+            this.view.$el.on('submit', 'form', (e) => { //提交歌曲
                 e.preventDefault();
                 this.model.saveData();
                 this.view.render();
                 if (this.model.data.id === '') {
                     this.model.createSong().then(() => {
-                        window.eventHub.emit('switchPage');
-                        window.eventHub.emit('toLastPage');
+                        window.eventHub.emit('switchPage', 'new');
                     })
                 } else {
                     this.model.updateSong().then(() => {

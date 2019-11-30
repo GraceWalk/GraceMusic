@@ -54,8 +54,12 @@
         },
         getSongs() {
             let songs = new AV.Query('Songs');
+
             return songs.find().then((songs) => {
                 this.data.allPage = parseInt((songs.length - 1) / 8) + 1;
+                if (this.data.nowPage > this.data.allPage) {
+                    this.data.nowPage = this.data.allPage;
+                }
                 this.data.songs = songs.map((song) => {
                     return { id: song.id, ...song.attributes }
                 })
@@ -97,6 +101,7 @@
             let allPage = this.model.data.allPage;
             let allLi = this.view.$el.find('li');
             let addPageNum = 0;
+
             switch (status) {
                 case 'prev':
                     addPageNum = -1;
@@ -111,6 +116,7 @@
                     addPageNum = allPage - nowPage;
                     break;
             }
+
             this.model.toPage(allLi, nowPage + addPageNum);
             this.view.toPage(this.model.data.nowPage, allPage);
         },
@@ -135,26 +141,29 @@
                 this.model.destroySong(destroySongId).then(() => {
                     this.model.getSongs().then(() => {
                         this.view.render(this.model.data);
-                        this.bindEvents();
+                        this.toPage('now');
                     })
                 })
             })
 
-            this.view.$el.on('click', '#next', () => {
+            this.view.$el.on('click', '#next', () => { //跳转到下一页
                 this.toPage('next');
             })
 
-            this.view.$el.on('click', '#prev', () => {
+            this.view.$el.on('click', '#prev', () => { //跳转到上一页
                 this.toPage('prev');
             })
         },
         bindEventHubs() {
-            window.eventHub.on('switchPage', () => { //切换页面
+            window.eventHub.on('switchPage', (x) => { //切换页面
                 if (this.view.$el.is(':hidden')) {
-                    this.model.getSongs().then(() => {
+                    this.model.getSongs().then(() => { //刷新歌单
                         this.view.render(this.model.data);
-                        this.toPage('now');
-
+                        if (x === 'new') {
+                            this.toPage('last');
+                        } else {
+                            this.toPage('now');
+                        }
                     });
                     this.view.show();
                 } else {
@@ -164,10 +173,6 @@
 
             window.eventHub.on('uploaded', () => {
                 this.view.hide();
-            })
-
-            window.eventHub.on('toLastPage', () => {
-                this.toPage('last');
             })
         }
     }
