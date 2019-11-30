@@ -3,10 +3,13 @@
         el: '#pickfiles',
         template: `
         <div class="title">GraceMusic</div>
-        <div class="uploadText"><svg t="1574937763165" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7324" width="100" height="100"><path d="M384 744H296a240 240 0 0 1 0-480h56a32 32 0 0 1 0 64h-56a176 176 0 0 0 0 352h88a32 32 0 0 1 0 64z" p-id="7325" fill="#aad08f"></path><path d="M736 384a32 32 0 0 1-32-32v-40a192 192 0 0 0-382.08-27.44 32 32 0 1 1-63.36-9.04A256 256 0 0 1 768 312v40a32 32 0 0 1-32 32z" p-id="7326" fill="#aad08f"></path><path d="M728 744H640a32 32 0 0 1 0-64h88a176 176 0 0 0 6.8-352 32 32 0 0 1 2.4-64A240 240 0 0 1 728 744zM512 856a32 32 0 0 1-32-32V544a32 32 0 0 1 64 0v280a32 32 0 0 1-32 32z" p-id="7327" fill="#aad08f"></path><path d="M512 936m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" p-id="7328" fill="#aad08f"></path><path d="M648 649.2A32 32 0 0 1 625.12 640L512 526.64 398.88 640a32 32 0 0 1-45.28-45.28l124.48-124.64a48 48 0 0 1 67.92 0L670.4 594.56a32 32 0 0 1-22.4 54.64z" p-id="7329" fill="#aad08f"></path></svg></div>
-    `,
+        <div class="uploadText" id="uploadText"><svg t="1574937763165" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7324" width="100" height="100"><path d="M384 744H296a240 240 0 0 1 0-480h56a32 32 0 0 1 0 64h-56a176 176 0 0 0 0 352h88a32 32 0 0 1 0 64z" p-id="7325" fill="#aad08f"></path><path d="M736 384a32 32 0 0 1-32-32v-40a192 192 0 0 0-382.08-27.44 32 32 0 1 1-63.36-9.04A256 256 0 0 1 768 312v40a32 32 0 0 1-32 32z" p-id="7326" fill="#aad08f"></path><path d="M728 744H640a32 32 0 0 1 0-64h88a176 176 0 0 0 6.8-352 32 32 0 0 1 2.4-64A240 240 0 0 1 728 744zM512 856a32 32 0 0 1-32-32V544a32 32 0 0 1 64 0v280a32 32 0 0 1-32 32z" p-id="7327" fill="#aad08f"></path><path d="M512 936m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" p-id="7328" fill="#aad08f"></path><path d="M648 649.2A32 32 0 0 1 625.12 640L512 526.64 398.88 640a32 32 0 0 1-45.28-45.28l124.48-124.64a48 48 0 0 1 67.92 0L670.4 594.56a32 32 0 0 1-22.4 54.64z" p-id="7329" fill="#aad08f"></path></svg></div>
+        `,
+        init() {
+            this.$el = $(this.el);
+        },
         render() {
-            $(this.el).html(this.template);
+            this.$el.html(this.template);
         }
     }
 
@@ -15,9 +18,19 @@
     let controller = {
         init(view, model) {
             this.view = view;
-            this.model = model;
+            this.view.init();
             this.view.render();
+            this.model = model;
             this.uploader();
+            this.bindEvents();
+        },
+        bindEvents() {
+            this.view.$el.on('click', '#uploadText', (e) => {
+                $(e.currentTarget).addClass('toLoad');
+                setTimeout(() => {
+                    $(e.currentTarget).removeClass('toLoad');
+                }, 1000)
+            })
         },
         uploader() {
             var uploader = Qiniu.uploader({

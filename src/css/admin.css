@@ -61,6 +61,7 @@ li {
     font-size: 26px;
     letter-spacing: 3px;
     font-family: 'Monaco';
+    user-select: none;
 }
 
 .container .pickfiles .uploadText {
@@ -128,6 +129,7 @@ li {
     font-weight: 500;
     color: #555870;
     letter-spacing: 3px;
+    user-select: none;
 }
 
 .container .new-song .input-box label {
@@ -135,6 +137,7 @@ li {
     font-weight: 400;
     letter-spacing: 2px;
     color: #8183a0;
+    user-select: none;
 }
 
 .container .new-song .input-box input {
@@ -156,6 +159,7 @@ li {
     width: 100%;
     height: 90px;
     background-color: #f8edec;
+    user-select: none;
     /* background: url('../img/catt.png') no-repeat; */
     /* background-size: 100%;
     background-position: right 40%; */
@@ -205,6 +209,7 @@ li {
     font-weight: 500;
     color: #555870;
     letter-spacing: 3px;
+    user-select: none;
 }
 
 .container .song-list ul {
@@ -226,6 +231,7 @@ li {
     font-size: 18px;
     font-weight: 600;
     border-bottom: 1px solid #d1bfbd;
+    user-select: none;
     /* text-align: center; */
 }
 
@@ -261,4 +267,23 @@ li {
 
 .container .song-list ul li .destroy {
     margin-right: 20px;
+}
+
+@keyframes toUpload {
+    0% {
+        transform: scale(1.0);
+    }
+    35% {
+        transform: scale(0.85);
+    }
+    66% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+.uploadText.toLoad {
+    animation: toUpload 1s;
 }
