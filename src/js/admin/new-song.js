@@ -39,10 +39,12 @@
             this.$el.html(html);
         },
         show() {
+            console.log('显示编辑页面')
             this.$el.css("z-index", '2');
             this.$el.fadeIn('fast');
         },
         hide() {
+            console.log('隐藏编辑页面')
             this.$el.css("z-index", '-1');
             this.$el.fadeOut('fast');
         }
@@ -147,11 +149,13 @@
             })
 
             window.eventHub.on('switchPage', () => { //切换页面
+                console.log('编辑页面的切换')
                 if (this.view.$el.is(':hidden')) {
                     this.view.show();
                 } else {
                     this.view.hide();
                 }
+                console.log('-------')
             })
         }
     }

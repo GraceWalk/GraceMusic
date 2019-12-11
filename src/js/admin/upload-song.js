@@ -33,6 +33,7 @@
             })
         },
         uploader() {
+            let $div = $('.container > div');
             var uploader = Qiniu.uploader({
                 runtimes: 'html5', //上传模式,依次退化
                 browse_button: 'pickfiles', //this.view.find('pickfiles'), //上传选择的点选按钮，**必需**
@@ -53,10 +54,24 @@
                     'BeforeUpload': function(up, file) { // 每个文件上传前,处理相关的事情
                     },
                     'UploadProgress': function(up, file) { // 每个文件上传时,处理相关的事情
+                        $div.map((index, element) => {
+                            if (index !== 0) {
+                                element.style.filter = 'blur(3px)';
+                            } else {
+                                element.style.zIndex = '10';
+                            }
+                        })
                     },
                     'FileUploaded': function(up, file, info) {
                         let song = file.name;
                         window.eventHub.emit('uploaded', song);
+                        $div.map((index, element) => {
+                            if (index !== 0) {
+                                element.style.filter = 'blur(0px)';
+                            } else {
+                                element.style.zIndex = '-10';
+                            }
+                        })
                     },
                     'Error': function(up, err, errTip) { //上传出错时,处理相关的事情
                     },

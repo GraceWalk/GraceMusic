@@ -34,10 +34,12 @@
             })
         },
         show() {
+            console.log('显示歌单界面')
             this.$el.css("z-index", '2');
             this.$el.fadeIn('fast');
         },
         hide() {
+            console.log('隐藏歌单界面')
             this.$el.css("z-index", '-1');
             this.$el.fadeOut('fast');
         },
@@ -156,6 +158,7 @@
         },
         bindEventHubs() {
             window.eventHub.on('switchPage', (x) => { //切换页面
+                console.log('歌单页面的切换')
                 if (this.view.$el.is(':hidden')) {
                     this.model.getSongs().then(() => { //刷新歌单
                         this.view.render(this.model.data);
@@ -169,6 +172,7 @@
                 } else {
                     this.view.hide();
                 }
+                console.log('----------------')
             })
 
             window.eventHub.on('uploaded', () => {
